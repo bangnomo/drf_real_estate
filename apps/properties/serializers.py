@@ -11,7 +11,6 @@ class PropertySerializer(serializers.ModelSerializer):
         model = Property
         fields = ["id",
             "user",
-            "profile_photo",
             "title",
             "slug",
             "ref_code",

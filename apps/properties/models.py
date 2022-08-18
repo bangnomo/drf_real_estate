@@ -122,7 +122,7 @@ class Property(TimeStampedUUIDModel):
         tax_percentage = self.tax
         property_price = self.price
         tax_amount = round(tax_percentage * property_price,2)
-        price_after_text = float(round(property_price + tax_amount),2)
+        price_after_text = float(round(property_price + tax_amount, 2))
         return price_after_text
 
 class PropertyViews(TimeStampedUUIDModel):
