@@ -40,3 +40,8 @@ class UserSerializer(serializers.ModelSerializer):
         if  instance.is_superuser:
             representation["admin"] = True
         return representation
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    class Meta(UserCreateSerializer.Meta): #su dung Meta tu class UserCreateSerializer cua Djoser
+        model = User
+        fields = ["id","username","email","first_name","last_name","password"]
