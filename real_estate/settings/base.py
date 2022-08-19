@@ -9,19 +9,19 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import environ
+import mimetypes
 import os
 from datetime import timedelta
 from pathlib import Path
-import mimetypes
+
+import environ
+
 mimetypes.add_type("text/css", ".css", True)
 
-env = environ.Env(
-    DEBUG=(bool, True)
-)
+env = environ.Env(DEBUG=(bool, True))
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'. Note: In this project move up to one folder 
+# Build paths inside the project like this: BASE_DIR / 'subdir'. Note: In this project move up to one folder
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 environ.Env.read_env(BASE_DIR / ".env")
@@ -49,16 +49,21 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'rest_framework','djoser','rest_framework_simplejwt','django_filters', 'django_countries','phonenumber_field',
+    "rest_framework",
+    "djoser",
+    "rest_framework_simplejwt",
+    "django_filters",
+    "django_countries",
+    "phonenumber_field",
 ]
 
 LOCAL_APPS = [
-    'apps.common',
-    'apps.users',
-    'apps.profiles',
-    'apps.ratings',
-    'apps.properties',
-    'apps.enquiries'
+    "apps.common",
+    "apps.users",
+    "apps.profiles",
+    "apps.ratings",
+    "apps.properties",
+    "apps.enquiries",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -144,7 +149,7 @@ STATIC_ROOT = BASE_DIR / "static"
 # print(STATIC_ROOT)
 
 STATICFILES_DIRS = []
-MEDIA_URL = 'mediafiles/'
+MEDIA_URL = "mediafiles/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 # Default primary key field type
@@ -159,39 +164,39 @@ AUTH_USER_MODEL = "users.User"
 # Authentication settings (djoser)
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('Bearer','JWT'),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'SIGNING_KEY': env("SIGNING_KEY"),
-    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    "AUTH_HEADER_TYPES": ("Bearer", "JWT"),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "SIGNING_KEY": env("SIGNING_KEY"),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
-#https://djoser.readthedocs.io/en/latest/settings.html
+# https://djoser.readthedocs.io/en/latest/settings.html
 DJOSER = {
-    'LOGIN_FIELD': "email",
-    "USER_CREATE_PASSWORD_RETYPE": True, # If True, you need to pass re_password to /users/ endpoint, to validate password equality.
-    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True, 
+    "LOGIN_FIELD": "email",
+    "USER_CREATE_PASSWORD_RETYPE": True,  # If True, you need to pass re_password to /users/ endpoint, to validate password equality.
+    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
     "SEND_CONFIRMATION_EMAIL": True,
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    "SET_PASSWORD_RETYPE": True, #If True, you need to pass re_new_password to /users/set_password/ endpoint, to validate password equality.
-    "PASSWORD_RESET_CONFIRM_RETYPE": True, #If True, you need to pass re_new_password to /users/reset_password_confirm/ endpoint in order to validate password equality.
-    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-    #https://djoser.readthedocs.io/en/latest/settings.html#serializers
-    'SERIALIZERS': {
-        'user_create': 'apps.users.serializers.CreateUserSerializer',
-        'user': 'apps.users.serializers.UserSerializer',
-        'current_user': 'apps.users.serializers.UserSerializer',
-        'user_delete': 'djoser.serializers.UserDeleteSerializer'
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "SET_PASSWORD_RETYPE": True,  # If True, you need to pass re_new_password to /users/set_password/ endpoint, to validate password equality.
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,  # If True, you need to pass re_new_password to /users/reset_password_confirm/ endpoint in order to validate password equality.
+    "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True,
+    # https://djoser.readthedocs.io/en/latest/settings.html#serializers
+    "SERIALIZERS": {
+        "user_create": "apps.users.serializers.CreateUserSerializer",
+        "user": "apps.users.serializers.UserSerializer",
+        "current_user": "apps.users.serializers.UserSerializer",
+        "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
 }
 # Logging settings (file không hoạt động, cần xem lại. Nếu file không hoạt động thì ko ghi log vào ổ đĩa được)
@@ -199,6 +204,7 @@ import logging
 import logging.config
 
 from django.utils.log import DEFAULT_LOGGING
+
 logger = logging.getLogger(__name__)
 
 LOG_LEVEL = "INFO"

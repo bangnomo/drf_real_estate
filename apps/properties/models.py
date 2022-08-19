@@ -1,20 +1,28 @@
-from tabnanny import verbose
-from django.db import models
 import random
 import string
+
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
+
 from apps.common.models import TimeStampedUUIDModel
+
 # Create your models here.
 
 User = get_user_model()
 
+
 class PropertyPublishManager(models.Model):
     def get_queryset(self):
-        return super(PropertyPublishManager, self).get_queryset().filter(published_status=True)
+        return (
+            super(PropertyPublishManager, self)
+            .get_queryset()
+            .filter(published_status=True)
+        )
+
 
 class Property(TimeStampedUUIDModel):
     class AdvertType(models.TextChoices):
@@ -29,17 +37,42 @@ class Property(TimeStampedUUIDModel):
         WAREHOUSE = "Warehouse", _("Warehouse")
         COMMERCIAL = "Commercial", _("Commercial")
         OTHER = "Other", _("Other")
-    #User delete -> cái Property không ảnh hưởng gì
-    user = models.ForeignKey(User, verbose_name=_("Agent, Seller or Buyer"), related_name="agent_buyer", on_delete=models.DO_NOTHING)
+
+    # User delete -> cái Property không ảnh hưởng gì
+    user = models.ForeignKey(
+        User,
+        verbose_name=_("Agent, Seller or Buyer"),
+        related_name="agent_buyer",
+        on_delete=models.DO_NOTHING,
+    )
     title = models.CharField(verbose_name=_("Property Title"), max_length=250)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
-    ref_code = models.CharField(verbose_name=_("Property Reference Code"), max_length=250, unique=True, blank=True)
-    description = models.TextField(verbose_name=_("Description"), default="Default description...update me later")
-    country = CountryField(verbose_name=_("Country"), default="VN", blank_label="(select country")
-    city = models.CharField(verbose_name=_("City"), max_length=180, default="Ho Chi Minh")
-    postal_code = models.CharField(verbose_name=_("Postal Code"), max_length=100, default="54000")
-    street_address = models.CharField(verbose_name=_("Street Address"), max_length=200, default="80 Le Loi")
-    property_number = models.IntegerField(verbose_name=_("Property Number"), validators=[MinValueValidator(1)],default=112)
+    ref_code = models.CharField(
+        verbose_name=_("Property Reference Code"),
+        max_length=250,
+        unique=True,
+        blank=True,
+    )
+    description = models.TextField(
+        verbose_name=_("Description"), default="Default description...update me later"
+    )
+    country = CountryField(
+        verbose_name=_("Country"), default="VN", blank_label="(select country"
+    )
+    city = models.CharField(
+        verbose_name=_("City"), max_length=180, default="Ho Chi Minh"
+    )
+    postal_code = models.CharField(
+        verbose_name=_("Postal Code"), max_length=100, default="54000"
+    )
+    street_address = models.CharField(
+        verbose_name=_("Street Address"), max_length=200, default="80 Le Loi"
+    )
+    property_number = models.IntegerField(
+        verbose_name=_("Property Number"),
+        validators=[MinValueValidator(1)],
+        default=112,
+    )
     price = models.DecimalField(
         verbose_name=_("Price"), max_digits=8, decimal_places=2, default=0.0
     )
@@ -105,7 +138,7 @@ class Property(TimeStampedUUIDModel):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         verbose_name = "Property"
         verbose_name_plural = "Properties"
@@ -114,24 +147,29 @@ class Property(TimeStampedUUIDModel):
         # The title() method returns a string where the first character in every word is upper case.
         self.title = str.title(self.title)
         self.description = str.capitalize(self.description)
-        self.ref_code = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        super(Property, self).save(*args, **kwargs) # Call the real save() method
+        self.ref_code = "".join(
+            random.choices(string.ascii_uppercase + string.digits, k=10)
+        )
+        super(Property, self).save(*args, **kwargs)  # Call the real save() method
 
     @property
     def final_property_price(self):
         tax_percentage = self.tax
         property_price = self.price
-        tax_amount = round(tax_percentage * property_price,2)
+        tax_amount = round(tax_percentage * property_price, 2)
         price_after_text = float(round(property_price + tax_amount, 2))
         return price_after_text
 
+
 class PropertyViews(TimeStampedUUIDModel):
     ip = models.CharField(verbose_name=_("IP address"), max_length=250)
-    property = models.ForeignKey(Property, related_name="property_views", on_delete=models.CASCADE)
+    property = models.ForeignKey(
+        Property, related_name="property_views", on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f"Total views on {self.property.title} is {self.property.views}"
-    
+
     class Meta:
         verbose_name = "Total views on property"
         verbose_name_plural = "Total property views"

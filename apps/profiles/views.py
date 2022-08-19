@@ -5,16 +5,19 @@ from rest_framework.views import APIView
 
 from .exceptions import NotYourProfile, ProfileNotFound
 from .models import Profile
-from .serializers import ProfileSerializer, UpdateProfileSerializer
 from .renderers import ProfileJSONRenderer
+from .serializers import ProfileSerializer, UpdateProfileSerializer
+
 # Create your views here.
 
+
 class AgentListAPIView(generics.ListAPIView):
-    permission_classes =  [ permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Profile.objects.filter(is_agent=True)
     serializer_class = ProfileSerializer
 
-'''
+
+"""
 Tuong duong voi khi su dung function-based views
 from rest_framework import api_view
 
@@ -25,12 +28,14 @@ def get_all_agent(request):
     serializer = ProfileSerializer(agents, many=True)
     name_spaced_response = { "agents" : serializer.data}
     return Response(name_spaced_response, status=status.HTTP_200_OK)
-'''
+"""
+
 
 class TopAgentListAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Profile.objects.filter(top_agent=True)
     serializer_class = ProfileSerializer
+
 
 class GetProfileAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -42,6 +47,7 @@ class GetProfileAPIView(APIView):
         user_profile = Profile.objects.get(user=user)
         serializer = ProfileSerializer(user_profile, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class UpdateProfileAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -58,9 +64,11 @@ class UpdateProfileAPIView(APIView):
         user_name = request.user.username
         if user_name != username:
             raise NotYourProfile
-        
+
         data = request.data
-        serializer = UpdateProfileSerializer(instance=request.user.profile, data=data, partial=True)
+        serializer = UpdateProfileSerializer(
+            instance=request.user.profile, data=data, partial=True
+        )
 
         serializer.is_valid()
         serializer.save()
