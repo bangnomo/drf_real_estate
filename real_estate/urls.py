@@ -11,8 +11,9 @@ urlpatterns = [
     path('api/v1/properties/', include('apps.properties.urls')),
     path('api/v1/ratings/', include('apps.ratings.urls')),
     path('api/v1/enquiries/', include('apps.enquiries.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] 
+# Khong dung khi luu anh local (bat dau tu luc dung docker)
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 admin.site.site_header = "Real Estate Admin"
 admin.site.site_title = "Real Estate Admin Portal"
 admin.site.index_title = "Welcome to real estate administration portal"
