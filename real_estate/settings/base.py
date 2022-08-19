@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "django_countries",
     "phonenumber_field",
+    "djcelery_email"
 ]
 
 LOCAL_APPS = [
